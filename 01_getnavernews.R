@@ -1,3 +1,5 @@
+## ÁöÀÎºÐ²² ¹ÞÀº ¼Ò½ºÆÄÀÏÀÔ´Ï´Ù.
+
 getNaverNews <- function()
 {
     print("Fast mode is not consider ip ban.")
@@ -755,7 +757,7 @@ if(selectIT==1)
                     options(warn=1)
 
                     test<-test[-grep("img",test)]
-                    test<-test[grep("ë©”ì¸ë‰´ìŠ¤",test):grep("ë‰´ìŠ¤ë¦¬ìŠ¤íŠ¸",test)[2]]
+                    test<-test[grep("ë©”ì¸?‰´?Š¤",test):grep("?‰´?Š¤ë¦¬ìŠ¤?Š¸",test)[2]]
                         test<-unique(gsub("\t","",test[grep("href",test)]))
                         test<-gsub('<a href=\"',"",test)
                         test<-gsub('\">',"",test)
@@ -897,33 +899,33 @@ if(selectIT==1)
                                     cate<-tst[grep(":category2",tst)]
                                     title<-tst[grep("og:title",tst)]
                                     author<-tst[grep(":author",tst)]
-                                    postTime<-tst[grep("ê¸°ì‚¬ìž…ë ¥",tst)]
-                                    chgTime<-tst[grep("ìµœì¢…ìˆ˜ì •",tst)]
-                                    if(length(grep("ë³¸ë¬¸ ë‚´ìš©",tst))>1)
+                                    postTime<-tst[grep("ê¸°ì‚¬?ž…? ¥",tst)]
+                                    chgTime<-tst[grep("ìµœì¢…?ˆ˜? •",tst)]
+                                    if(length(grep("ë³¸ë¬¸ ?‚´?š©",tst))>1)
                                         {
-                                            con<-tst[grep("ë³¸ë¬¸ ë‚´ìš©",tst)[1]:grep("ë³¸ë¬¸ ë‚´ìš©",tst)[2]]
+                                            con<-tst[grep("ë³¸ë¬¸ ?‚´?š©",tst)[1]:grep("ë³¸ë¬¸ ?‚´?š©",tst)[2]]
                                         }
                                     else
                                         {
-                                            con<-tst[grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)[ grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)>grep("ë³¸ë¬¸ ë‚´ìš©",tst)][1]]
+                                            con<-tst[grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)[ grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)>grep("ë³¸ë¬¸ ?‚´?š©",tst)][1]]
                                         }
 # end if
 
-                                    cate<-gsub("[^(ê°€-íž£ã„±-ã…Žã…-ã…£)]","",cate)
+                                    cate<-gsub("[^(ê°€-?ž£?„±-?…Ž?…-?…£)]","",cate)
                                     title<-gsub('<meta property=\"og:title\"\t\t\tcontent=\"',"",title)
                                     title<-gsub('\"/>',"",title)
                                     author<-gsub('<meta property=\"og:article:author\"\tcontent=\"',"",author)
                                     author<-gsub('\"/>',"",author)
-                                    author<-gsub(" ë„¤ì´ë²„ ë‰´ìŠ¤","",author)
+                                    author<-gsub(" ?„¤?´ë²? ?‰´?Š¤","",author)
                                     author<-gsub("[[:punct:]]", "", author)
                                     author<-gsub(" ", "", author)
                                     postTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",postTime)
-                                    postTime<-gsub("ê¸°ì‚¬ìž…ë ¥ ","",postTime)
+                                    postTime<-gsub("ê¸°ì‚¬?ž…? ¥ ","",postTime)
                                     if (length(chgTime)!=0)
                                         {
                                             chgTime<-gsub("\t","",chgTime)
                                             chgTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",chgTime)
-                                            chgTime<-gsub("ìµœì¢…ìˆ˜ì • ","",chgTime)
+                                            chgTime<-gsub("ìµœì¢…?ˆ˜? • ","",chgTime)
                                         }
                                     else
                                         {
@@ -995,24 +997,24 @@ if(selectIT==1)
 
                                     title<-tst[grep("og:title",tst)]
                                     author<-tst[grep(":author\"",tst)]
-                                    postTime<-tst[grep("ê¸°ì‚¬ìž…ë ¥",tst)+1]
-                                    chgTime<-tst[grep("ìµœì¢…ìˆ˜ì •",tst)]
-                                    if(length(grep("ê¸°ì‚¬ ë‚´ìš©",tst))>1)
+                                    postTime<-tst[grep("ê¸°ì‚¬?ž…? ¥",tst)+1]
+                                    chgTime<-tst[grep("ìµœì¢…?ˆ˜? •",tst)]
+                                    if(length(grep("ê¸°ì‚¬ ?‚´?š©",tst))>1)
                                         {
-                                            con<-tst[grep("ê¸°ì‚¬ ë‚´ìš©",tst)[1]:grep("ê¸°ì‚¬ ë‚´ìš©",tst)[2]]
+                                            con<-tst[grep("ê¸°ì‚¬ ?‚´?š©",tst)[1]:grep("ê¸°ì‚¬ ?‚´?š©",tst)[2]]
                                         }
                                     else
                                         {
-                                            con<-tst[grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)[ grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)>grep("ê¸°ì‚¬ ë‚´ìš©",tst)][1]]
+                                            con<-tst[grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)[ grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)>grep("ê¸°ì‚¬ ?‚´?š©",tst)][1]]
                                         }
 # end if
 
-                                    cate<-"ìŠ¤í¬ì¸ "
+                                    cate<-"?Š¤?¬ì¸?"
                                     title<-gsub('<meta property=\"og:title\"       content=\"',"",title)
                                     title<-gsub('\"/>',"",title)
                                     author<-gsub('<meta property=\"og:article:author\" content=\"',"",author)
                                     author<-gsub('\"/>',"",author)
-                                    author<-gsub("ë„¤ì´ë²„ ìŠ¤í¬ì¸  ","",author)
+                                    author<-gsub("?„¤?´ë²? ?Š¤?¬ì¸? ","",author)
                                     author<-gsub("[[:punct:]]", "", author)
                                     author<-gsub(" ", "", author)
                                     postTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",postTime)
@@ -1023,7 +1025,7 @@ if(selectIT==1)
                                             chgTime<-gsub("\t","",chgTime)
                                             chgTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",chgTime)
                                             chgTime<-gsub("[[:punct:]]", "", chgTime)
-                                            chgTime<-gsub("ìµœì¢…ìˆ˜ì •", "", chgTime)
+                                            chgTime<-gsub("ìµœì¢…?ˆ˜? •", "", chgTime)
                                             chgTime<-gsub(" ", "", chgTime)
                                             chgTime<-paste0(substr(chgTime,1,4),"-",substr(chgTime,5,6),"-",substr(chgTime,7,8)," ",substr(chgTime,9,10),":",substr(chgTime,11,12))
                                         }
@@ -1126,38 +1128,38 @@ if(selectIT==1)
                                             tst<-gsub('&#039;',"'",tst)
                                             tst<-gsub('&#034','"',tst)
 
-                                            cate<-"TVì—°ì• "
+                                            cate<-"TV?—°?• "
                                             title<-tst[grep("og:title",tst)]
                                             author<-tst[grep(":author",tst)]
-                                            postTime<-tst[grep("ê¸°ì‚¬ìž…ë ¥",tst)]
-                                            chgTime<-tst[grep("ìµœì¢…ìˆ˜ì •",tst)]
-                                            if(length(grep("ë³¸ë¬¸ ë‚´ìš©",tst))>1)
+                                            postTime<-tst[grep("ê¸°ì‚¬?ž…? ¥",tst)]
+                                            chgTime<-tst[grep("ìµœì¢…?ˆ˜? •",tst)]
+                                            if(length(grep("ë³¸ë¬¸ ?‚´?š©",tst))>1)
                                                 {
-                                                    con<-tst[grep("ë³¸ë¬¸ ë‚´ìš©",tst)[1]:grep("ë³¸ë¬¸ ë‚´ìš©",tst)[2]]
+                                                    con<-tst[grep("ë³¸ë¬¸ ?‚´?š©",tst)[1]:grep("ë³¸ë¬¸ ?‚´?š©",tst)[2]]
                                                 }
                                             else
                                                 {
-                                                    con<-tst[grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)[ grep("[(ê°€-íž£ã„±-ã…Žã…-ã…£)]",tst)>grep("ë³¸ë¬¸ ë‚´ìš©",tst)][1]]
+                                                    con<-tst[grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)[ grep("[(ê°€-?ž£?„±-?…Ž?…-?…£)]",tst)>grep("ë³¸ë¬¸ ?‚´?š©",tst)][1]]
                                                 }
 # end if
 
-                                            cate<-gsub("[^(ê°€-íž£ã„±-ã…Žã…-ã…£)]","",cate)
+                                            cate<-gsub("[^(ê°€-?ž£?„±-?…Ž?…-?…£)]","",cate)
                                             title<-gsub('<meta property=\"og:title\"\t\t\tcontent=\"',"",title)
                                             title<-gsub('\"/>',"",title)
                                             author<-gsub('<meta property=\"og:article:author\"\tcontent=\"',"",author)
                                             author<-gsub('\"/>',"",author)
-                                            author<-gsub("ë„¤ì´ë²„TVì—°ì˜ˆ","",author)
+                                            author<-gsub("?„¤?´ë²„TV?—°?˜ˆ","",author)
                                             author<-gsub("[[:punct:]]", "", author)
                                             author<-gsub(" ", "", author)
 
                                             postTime<-gsub("\t","",postTime)
                                             postTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",postTime)
-                                            postTime<-gsub("ê¸°ì‚¬ìž…ë ¥","",postTime)
+                                            postTime<-gsub("ê¸°ì‚¬?ž…? ¥","",postTime)
                                             if (length(chgTime)!=0)
                                                 {
                                                     chgTime<-gsub("\t","",chgTime)
                                                     chgTime<-gsub("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>","",chgTime)
-                                                    chgTime<-gsub("ìµœì¢…ìˆ˜ì •","",chgTime)
+                                                    chgTime<-gsub("ìµœì¢…?ˆ˜? •","",chgTime)
                                                 }
                                             else
                                                 {
@@ -1265,9 +1267,9 @@ if(selectIT==1)
                                             postTime<-tst[grep('<dd class="date">',tst)]
                                             con<-tst[grep('<div class="data">',tst)+1]
 
-                                            cate<-gsub("[^(ê°€-íž£ã„±-ã…Žã…-ã…£)]","",cate)
+                                            cate<-gsub("[^(ê°€-?ž£?„±-?…Ž?…-?…£)]","",cate)
                                             cate<-gsub(" ","",cate)
-                                            cate<-gsub("ë„¤ì´ë²„","",cate)
+                                            cate<-gsub("?„¤?´ë²?","",cate)
                                             title<-gsub('\t',"",title)
                                             title<-gsub("<[^>]*>","",title)
 
