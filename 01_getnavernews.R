@@ -1,4 +1,4 @@
-## 지인분께 받은 소스파일입니다.
+## This is a source file from a friend of mine.
 
 getNaverNews <- function()
 {
