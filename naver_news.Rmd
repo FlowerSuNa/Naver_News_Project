@@ -1,0 +1,630 @@
+---
+title: "Naver News Text Mining"
+author: "Sun Hwa"
+output: html_document
+---
+
+<style>
+
+ol.title {
+  list-style-type: upper-roman;
+  list-style-position: outside;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+ol.contents {
+  list-style-position: outside;
+  font-size: 20px;
+  color: #1F4E79;
+}
+
+ol.list {
+  list-style-type: upper-alpha;
+  list-style-position: outside;
+  font-size: 15px;
+  color: #1F4E79;
+}
+
+ol li {
+  margin-left: 0px;
+}
+
+div.contents {
+  border: 1px solid #BDD7EE;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 12px;
+  color: #000000;
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
+
+div.explain {
+  border: 1px solid #EAECEE;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 12px;
+  color: #CD6155;
+  margin-top: 10px;
+  margin-bottom: 10px; 
+}
+
+p.comment {
+  font-size: 15px;
+  color: #000000;
+}
+
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(comment = '')
+knitr::opts_chunk$set(out.width = '900px')
+```
+
+```{r include=FALSE}
+options(width=800)
+```
+
+
+<br> <br> <hr> <br> <br>
+
+<img src="./images/caption0.png", id="list"> <br> <br>
+
+<ol class="title">
+  <li> <a href="#CH1"> µ¥ÀÌÅÍ ¼öÁý </a> </li>
+  <li> <a href="#CH2"> µ¥ÀÌÅÍ Å½»ö </a> </li>
+  <li> <a href="#CH3"> ´Ü¾î ÃßÃâ </a> </li>
+  <li> <a href="#CH4"> Wordcloud </a> </li>
+  <li> <a href="#CH5"> Association Rules </a> </li>
+  <li> <a href="#CH6"> ¸¶Ä¡¸ç... </a> </li>
+</ol>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 1. µ¥ÀÌÅÍ ¼öÁý -------------------------------- -->
+
+<img src="./images/caption1.png" id="CH1"> <br> <br>
+
+<img src="./images/01_data_collection.png"> <br> <br>
+
+<div class="contents">
+RÀ» ÀÌ¿ëÇÏ¿© ³×ÀÌ¹ö ´º½º µ¥ÀÌÅÍ¸¦ csv ÆÄÀÏ·Î °¡Á®¿Ô½À´Ï´Ù. 
+2008³âºÎÅÍ 2017³â±îÁö 10³âÀÇ µ¥ÀÌÅÍ¸¦ ¼öÁýÇÏ°í ½Í¾úÁö¸¸, °úÇÐ°ú IT Ä«Å×°í¸®¸¸ 1³âÄ¡ µ¥ÀÌÅÍ¸¦ ¼öÁýÇÏ´Â µ¥ 3ÀÏ Á¤µµÀÇ ½Ã°£ÀÌ ¼Ò¸ðµÇ¾î ¾Æ½±°Ôµµ 2017³â, 2012³â, 2007³â ÃÑ 3³âÄ¡ÀÇ µ¥ÀÌÅÍ¸¸ ¼öÁýÇß½À´Ï´Ù.
+</div> <br>
+
+<div style="text-align:right;"><a href="#list"><img src="./images/tolist.png"></a></div> <br>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 2. µ¥ÀÌÅÍ Å½»ö -------------------------------- -->
+
+<img src="./images/caption2.png" id="CH2"> <br> <br>
+
+<ol class="contents">
+
+<li> µ¥ÀÌÅÍ ±¸Á¶ È®ÀÎ </li>
+
+<div class="contents">
+µ¥ÀÌÅÍ¸¦ ¼öÁý ÈÄ, csv ÆÄÀÏ·Î ÀúÀåµÈ µ¥ÀÌÅÍ¸¦ Å½»öÇÏ´Â °úÁ¤À» °¡Á³½À´Ï´Ù.
+µ¥ÀÌÅÍÀÇ ±¸Á¶°¡ ¾î¶°ÇÑÁö, ¾î¶°ÇÑ º¯¼ö°¡ ÀÖ´ÂÁö, µ¥ÀÌÅÍ°¡ ¾î¶»°Ô ÀÔ·ÂµÇ¾ú´ÂÁö µîÀ» »ìÆìº¸¾Ò½À´Ï´Ù.
+</div>
+
+<img src="./images/02_data_preparation.png"> <br> <br>
+
+<li> ±â»ç¼ö È®ÀÎ </li>
+
+<div class="contents">
+µ¥ÀÌÅÍ Å½»ö°úÁ¤À» °¡Áö¸ç ¿ùº° ±â»ç¼ö¿¡ ´ëÇØ `ggplot`À» ÀÌ¿ëÇÏ¿© ¸·´ë±×·¡ÇÁµµ ±×·Áº¸¾Ò½À´Ï´Ù.
+</div> <br>
+
+<p class="comment"> 2017³â </p>
+<img src="./visualization/2017_freq.png"> <br>
+
+<div class="contents">
+2017³âÀÇ ÃÑ ±â»ç¼ö´Â 83780°ÇÀÌ¿´À¸¸ç, 11¿ù¿¡ 8133°ÇÀ¸·Î °¡Àå ¸¹¾Ò½À´Ï´Ù. ¿ù Æò±Õ ±â»ç¼ö´Â ¾à 6982°ÇÀÔ´Ï´Ù.
+</div> <br>
+
+<p class="comment"> 2012³â </p>
+<img src="./visualization/2012_freq.png"> <br>
+
+<div class="contents">
+2012³âÀÇ ÃÑ ±â»ç¼ö´Â 85063°ÇÀÌ¿´À¸¸ç, 6¿ù¿¡ 5759°ÇÀ¸·Î °¡Àå Àû¾ú½À´Ï´Ù. ¿ù Æò±Õ ±â»ç¼ö´Â ¾à 7089°ÇÀÔ´Ï´Ù.
+</div> <br>
+
+<p class="comment"> 2007³â </p>
+<img src="./visualization/2007_freq.png"> <br>
+
+<div class="contents">
+2007³âÀÇ ÃÑ ±â»ç¼ö´Â 50453°ÇÀÌÀ¸·Î »ó´ëÀûÀ¸·Î 2017³â°ú 2012³âÀÇ ±â»ç¼öº¸´Ù ¸Å¿ì Àû¾ú½À´Ï´Ù. ±×¸®°í 4¿ù°ú 5¿ù¿¡ °¢°¢ 5173, 5661°ÇÀ¸·Î 2007³â ´Ù¸¥ ¿ù¿¡ ºñÇØ ±â»ç¼ö°¡ ¸¹Àº ÆíÀÌ¾ú½À´Ï´Ù. ¿ù Æò±Õ ±â»ç¼ö´Â ¾à 4204°ÇÀÔ´Ï´Ù.
+</div> <br>
+
+<li> µ¥ÀÌÅÍ ºÐÇÒÇÏ±â </li>
+
+<div class="contents">
+±â»ç¼ö¿¡ ´ëÇØ »ìÆìº» µÚ, ¿ë·®ÀÌ Å« µ¥ÀÌÅÍ¸¦ ºÐ±âº°·Î ³ª´©¾ú½À´Ï´Ù. ±×¸®°í ´Ü¾î¸¦ ÃßÃâÇÏ±â Àü¿¡ ½Å¹®»ç¸í, ±¤°í¹®±¸, Æ¯¼ö¹®ÀÚ µî°ú °°Àº ¹®ÀÚ³ª ¹®ÀåÀ» Á¤±ÔÇ¥Çö½ÄÀ» ÀÌ¿ëÇÏ¿© Á¦°ÅÇÏ¿´½À´Ï´Ù.
+</div> <br>
+
+</ol>
+
+<div style="text-align:right;"><a href="#list"><img src="./images/tolist.png"></a></div> <br>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 3. ´Ü¾î ÃßÃâ -------------------------------- -->
+
+<img src="./images/caption3.png" id="CH3"> <br> <br>
+
+<ol class="contents">
+
+<li> ¶óÀÌºê·¯¸® ºÒ·¯¿À±â </li>
+
+<div class="explain">
+KoNLP : ÇÑ±Û ÅØ½ºÆ® ¸¶ÀÌ´×À» À§ÇÑ ÆÐÅ°Áö <br> <br>
+stringr , dplyr : °£ÆíÇÏ°Ô µ¥ÀÌÅÍ ÇÚµé¸µÇÏ±â À§ÇÑ ÆÐÅ°Áö
+</div>
+
+```{r eval=FALSE}
+library(KoNLP)
+library(stringr)
+library(dplyr)
+```
+<br>
+<li style="margin-bottom: 10px;"> ÇÑ±Û »çÀü »ç¿ë </li>
+```{r eval=FALSE}
+# useSystemDic()
+# useSejongDic()
+useNIADic()
+```
+<br>
+<li> µ¥ÀÌÅÍ ºÒ·¯¿À±â </li>
+<br> <br>
+<li> ´Ü¾î ÇüÅÂ ºÐ¼® </li>
+
+<div class="explain">
+extractNoun : ´Ü¾î ÃßÃâ <br> <br>
+SimplePos22 : ´Ü¾î ÇüÅÂ ºÐ¼®
+</div>
+
+```{r eval=FALSE}
+# ´Ü¾î ÇüÅÂ ºÐ¼®
+words <- sapply(Contents, SimplePos22, USE.NAMES = F)
+
+
+# NC, F ÇüÅÂ¸¸ ÃßÃâ 
+words_pre <- unlist(words)
+words_pre <- str_match(words_pre, "([0-9a-zA-Z°¡-ÆR]+)/(NC|F)")
+
+
+# NC, F ¿ÜÀÇ ÇüÅÂ Á¦°Å
+words_NC <- Filter(function(x) {!is.na(x)}, words_pre[,2])
+```
+
+<div class="contents">
+Ã³À½¿¡´Â ¸í»ç ÃßÃâÀ» ÇÏ¿´´Âµ¥, ¸í»ç°¡ ³Ê¹« ºÐ¸®µÇ¾î ÃßÃâµÇ¾î Å°¿öµå¸¦ È®ÀÎÇÒ ¼ö ¾ø¾ú½À´Ï´Ù. ¿¹¸¦µé¸é, '½º¸¶Æ®Æù'ÀÌ¶ó´Â ´Ü¾î°¡ '½º¸¶Æ®'¿Í 'Æù'À¸·Î ºÐ¸®µÇ´Â °æ¿ì°¡ ¸¹¾Ò½À´Ï´Ù. ÇÑ±Û »çÀü¿¡ ´Ü¾î¸¦ Ãß°¡ÇÏ¿©µµ ¹®Á¦°¡ ÇØ°áÀÌ µÇÁö ¾Ê¾Æ, ´Ü¾î¸¦ ÇüÅÂ ºÐ¼® ÈÄ ¸í»ç¿Í ¿Ü·¡¾î¸¸ ÃßÃâÇÏ´Â °úÁ¤À¸·Î ´Ü¾î¸¦ ÃßÃâÇÏ¿´½À´Ï´Ù.
+</div> <br>
+
+<li> µ¥ÀÌÅÍ ÀüÃ³¸® </li>
+
+<div class="contents">
+À§¿¡¼­ ÃßÃâÇÑ ´Ü¾î¸¦ ÀüÃ³¸®ÇÏ±â À§ÇØ °¡Àå ¸ÕÀú ¼Ò¹®ÀÚ¸¦ ´ë¹®ÀÚ·Î ¸ðµÎ ¼öÁ¤ÇÏ¿´½À´Ï´Ù. ±×¸®°í °°Àº ÀÇ¹ÌÀÇ ´Ü¾î´Â °°Àº ´Ü¾î·Î ¸ðµÎ ÅëÀÏ ½ÃÄÑÁÖ¾ú½À´Ï´Ù. ´ÙÀ½À¸·Î ºóµµ¼ö°¡ ³ôÀº ´Ü¾îµéÀ» °è¼Ó È®ÀÎÇÏ¸ç ÇÊ¿ä¾ø´Â ´Ü¾îµéÀ» ºÒ¿ë¾î ¸®½ºÆ®¿¡ Ãß°¡ÇÏ¸ç ºÒ¿ë¾î ¸®½ºÆ®¸¦ ¸¸µé¾ú½À´Ï´Ù. ºÒ¿ë¾î ¸®½ºÆ®¸¦ ¿Ï¼ºÇÑ µÚ, ºÒ¿ë¾î ¸®½ºÆ®¿¡ ÀÖ´Â ´Ü¾î¸¦ Á¦°ÅÇÏ¿´½À´Ï´Ù. <br>
+ÀÌºÎºÐ¿¡¼­ °¡Àå ¸¹Àº ½Ã°£À» ¼Ò¸ðÇÏ°ÔµÇ¾ú½À´Ï´Ù. ºÒ¿ë¾î ¸®½ºÆ®¸¦ ¸¸µå´Â ±âÁØÀÌ ´Ù¼Ò ÁÖ°üÀûÀÌ´Ùº¸´Ï ½ÅÁßÈ÷ »ý°¢À» ¸¹ÀÌ ÇÏ°ÔµÇ¾ú´ø ºÎºÐÀÌ¾ú°í, µ¥ÀÌÅÍÀÇ ¿ë·®ÀÌ ÄÇ±â¶§¹®¿¡ Á¦°ÅÇÏ´Âµ¥µµ ½Ã°£ÀÌ ±²ÀåÈ÷ ¿À·¡°É·È½À´Ï´Ù.
+</div> <br>
+
+<ol class="list">
+<li style="margin-bottom: 10px;"> ¼Ò¹®ÀÚ¸¦ ´ë¹®ÀÚ·Î ¼öÁ¤ </li>
+```{r eval=FALSE}
+words_NC <- toupper(words_NC)
+```
+<br>
+<li style="margin-bottom: 10px;"> °°Àº ÀÇ¹ÌÀÇ ´Ü¾î´Â °°Àº ´Ü¾î·Î ÅëÀÏ </li>
+```{r eval=FALSE}
+words_NC <- toupper(words_NC)
+words_NC <- gsub("°¶S","°¶·°½ÃS", words_NC)
+words_NC <- gsub("(°¶·°½ÃS[0-9]).*","\\1", words_NC)
+words_NC <- gsub("^(S[0-9]).*","°¶·°½Ã\\1", words_NC)
+words_NC <- gsub("°¶³ëÆ®", "°¶·°½Ã³ëÆ®", words_NC)
+words_NC <- gsub("(°¶·°½Ã³ëÆ®[0-9]).*","\\1", words_NC)
+words_NC <- gsub("^(³ëÆ®[0-9]).*","°¶·°½Ã\\1", words_NC)
+words_NC <- gsub("(G[0-9]{1,2}).", "\\1", words_NC)
+words_NC <- gsub("(V[0-9]{1,2}).", "\\1", words_NC)
+words_NC <- gsub("(¾ÆÀÌÆù[0-9]).", "\\1", words_NC)
+words_NC <- gsub("¸ð¹ÙÀÏ¿ùµåÄá±×·¹½º", "MWC", words_NC)
+words_NC <- gsub("³ª»ç", "NASA", words_NC)
+words_NC <- gsub("À¯ÀüÀÚ", "DNA", words_NC)
+words_NC <- gsub("ÈÞ´ëÀüÈ­", "ÈÞ´ëÆù", words_NC)
+words_NC <- gsub("Á¤º¸Åë½Å±â¼ú", "ICT", words_NC)
+words_NC <- gsub("DRONE", "µå·Ð", words_NC)
+words_NC <- gsub("·ÕÅÒ¿¡º¼·ç¼Ç", "LTE", words_NC)
+words_NC <- gsub("¿¤Æ¼ÀÌ", "LTE", words_NC)
+words_NC <- gsub("µ¥ÀÌÅÍº£ÀÌ½º", "DB", words_NC)
+words_NC <- gsub("4Â÷»ê¾÷Çõ¸í.", "4Â÷»ê¾÷Çõ¸í", words_NC)
+words_NC <- gsub("¾ËÆÄ°í.", "¾ËÆÄ°í", words_NC)
+words_NC <- gsub("¹ß»ç°¡", "¹ß»ç", words_NC)
+words_NC <- gsub("MP3ÇÃ·¹ÀÌ¾î", "MP3", words_NC)
+words_NC <- gsub("Áö»óÆÄDMB", "DMB", words_NC)
+words_NC <- gsub("ÀüÀÚ½Å¹®ÀÎÅÍ³Ý", "ÀüÀÚ½Å¹®", words_NC)
+words_NC <- gsub("»ç¹°ÀÎÅÍ³Ý", "IOT", words_NC)
+words_NC <- gsub("°¡»óÇö½Ç", "VR", words_NC)
+words_NC <- gsub("Áõ°­Çö½Ç", "AR", words_NC)
+```
+<br>
+<li style="margin-bottom: 10px;"> ºÒ¿ë¾î ¸®½ºÆ® ¸¸µé±â </li>
+```{r eval=FALSE}
+words_freq <- table(words_NC)
+words_freq <- sort(words_freq, decreasing=T)
+words_freq <- words_freq[words_freq >= 300]
+words_list <- names(words_freq)
+words_list
+l <- length(words_list)
+
+for(i in 1:l){
+  word <- words_list[i]
+  cat(i, ".", word, ": ")
+  
+  choose_mode <- readline(prompt="(1:remove 2:next *:break) :")
+  
+  if(choose_mode==1){
+    choose_mode2 <- readline(prompt="(1:only *:every) : ")
+    
+    if(choose_mode2 == 1) {
+      word <- paste("^", word,"$", sep="")
+    }
+    
+    count <- length(remove_list) + 1
+    remove_list[count] <- word
+  }
+  else if(choose_mode==2) next
+  else break
+}
+```
+<br>
+<li style="margin-bottom: 10px;"> ºÒ¿ë¾î Á¦°Å </li>
+```{r eval=FALSE}
+remove_list <- sort(remove_list, decreasing=T)
+r <- length(remove_list)
+
+for(i in 1:r){
+  word <- remove_list[i]
+  
+  words_NC <- gsub(word,"", words_NC)
+  words_NC <- Filter(function(x) {nchar(x) >= 1}, words_NC)
+  cat(i,".",word,"remove.\n")
+}
+
+remove_list <- sort(names(table(remove_list)), decreasing=T)
+```
+<br>
+
+</ol>
+
+<li style="margin-bottom: 10px;"> ´Ü¾î ºóµµ¼ö È®ÀÎ </li>
+```{r eval=FALSE}
+words_freq <- table(words_NC)
+words_freq <- sort(words_freq, decreasing=T)
+words_freq <- words_freq[words_freq >= 300]
+words_freq
+```
+
+<div class="contents">
+2017³â¿Í 2012³â µ¥ÀÌÅÍÀÇ ´Ü¾î´Â ºóµµ¼ö°¡ 300°³ ÀÌ»óÀÎ ´Ü¾îµé¸¸ ÀúÀåÇÏ°í, 2007³â µ¥ÀÌÅÍÀÇ ´Ü¾î´Â ºóµµ¼ö°¡ 200°³ ÀÌ»óÀÎ ´Ü¾îµé¸¸ ÀúÀåÇÏ¿´½À´Ï´Ù.
+</div> <br>
+
+<li> µ¥ÀÌÅÍ ³âµµº°·Î ÇÕÄ¡±â </li>
+
+<div class="contents">
+ºÐ±âº°·Î ³ª´©¾îÁ® ÀÖ´Â ÀüÃ³¸®ÇÑ µ¥ÀÌÅÍµéÀ» ³âµµº°·Î µ¥ÀÌÅÍ¸¦ ÇÕÃÄÁÖ¾ú½À´Ï´Ù.
+<div> <br>
+
+</ol>
+
+<div style="text-align:right;"><a href="#list"><img src="./images/tolist.png"></a></div> <br>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 4. Wordcloud -------------------------------- -->
+
+<img src="./images/caption4.png" id="CH4"> <br> <br>
+
+<div class="contents">
+´ÙÀ½À¸·Î `wordcloud2` ÆÐÅ°Áö¸¦ ÀÌ¿ëÇÏ¿© ³âµµº°·Î Wordcloud ½Ã°¢È­¸¦ ÇØº¸¾Ò½À´Ï´Ù. Wordcloud À§¿¡ ¸¶¿ì½º Ä¿¼­¸¦ ¿Ã¸®½Ã¸é ÇØ´ç Å°¿öµåÀÇ ºóµµ¼ö¸¦ È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+</div>
+
+```{r}
+library(wordcloud2)
+```
+
+```{r echo=FALSE}
+c <- c('#E6B0AA','#F5B7B1','#D7BDE2',
+       '#D2B4DE','#A9CCE3','#AED6F1',
+       '#A3E4D7','#A2D9CE','#A9DFBF',
+       '#ABEBC6','#F9E79F','#FAD7A0',
+       '#F5CBA7','#EDBB99','#F2D7D5',
+       '#FADBD8','#E8DAEF','#D4E6F1',
+       '#D6EAF8','#D1F2EB','#D0ECE7',
+       '#D4EFDF','#D5F5E3','#FAE5D3',
+       '#F6DDCC','#D7DBDD','#BFC9CA',
+       '#CCD1D1','#B3B6B7','#A6ACAF')
+c <- rep(c, times=8)
+```
+<br> <br>
+<p class="comment"> 2017 Title </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2017/2017_title_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+<p class="comment"> 2017 Contents </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2017/2017_contents_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+
+<div class="contents">
+2017³âÀº '½º¸¶Æ®Æù', 'ÀÎ°øÁö´É', 'IOT', 'ICT', '·Îº¿', 'VR', '5G', 'AR' µî°ú °°Àº ÇöÀç ¸¹ÀÌ °ü½ÉÀ» ¹ÞÀº ºÐ¾ß¿¡ ´ëÇÑ ³»¿ëµéÀÌ Å°¿öµå·Î ¸¹ÀÌ º¸¿´½À´Ï´Ù. ±×¸®°í '°¶·°½Ã³ëÆ®','¾ÆÀÌÆù' µî°ú °°ÀÌ ½º¸¶Æ®Æù ±âÁ¾¿¡ ´ëÇÑ Å°¿öµåµµ ¸¹ÀÌ ¾ð±ÞµÇ°í ÀÖ´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. ÀÌ¿Ü¿¡µµ '°³¹ß', '°ÔÀÓ', '¼¼°è', 'Á¤º¸', 'ÅõÀÚ' µî°ú °°Àº °úÇÐ, IT°è¿­¿¡¼­ ¸¹ÀÌ ¾²ÀÌ´Â ´Ü¾îµµ Å°¿öµå·Î ¸¹ÀÌ º¸¿©Áö°í ÀÖ½À´Ï´Ù. <br>
+'ÀÎ°øÁö´É'°ú 'AI'´Â °°Àº ¶æÀÌÁö¸¸, 'AI'°¡ 'Á¶·ùµ¶°¨'ÀÇ ¶æµµ Æ÷ÇÔµÇ¾î ÀÖ¾î °°Àº ´Ü¾î·Î ÅëÀÏÇÏÁö ¸øÇß½À´Ï´Ù. <br>
+</div> <br> <br>
+
+<p class="comment"> 2012 Title </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2012/2012_title_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+<p class="comment"> 2012 Contents </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2012/2012_contents_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+
+<div class="contents">
+2012³âÀº 'LTE', '½º¸¶Æ®Æù', 'Å¬¶ó¿ìµå', '³ª·ÎÈ£', 'Ä«Ä«¿ÀÅå', '½º¸¶Æ®TV' µî°ú °°Àº Å°¿öµå°¡ ´«¿¡ ¶ç¾úÀ¸¸ç, '¾ÆÀÌÆù', '°¶·°½Ã', '¿ÉÆ¼¸Ó½º' µî°ú °°Àº ½º¸¶Æ®Æù ±âÁ¾¿¡ ´ëÇÑ Å°¿öµåµµ »ìÆìº¸½Ç ¼ö ÀÖ½À´Ï´Ù. Æ¯È÷, 'LTE'¿Í '½º¸¶Æ®Æù'ÀÌ ´Ù¸¥ ´Ü¾îµé¿¡ ºñÇØ ¸Å¿ì Å©°Ô ±×·ÁÁø °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. <br>
+2017³â¿¡ ¸¹ÀÌ ¾ð±ÞµÇ¾ú´ø 'ICT'´Â 2012³â¿¡´Â Á¶±×¸Ä°Ô º¸¿©Áö´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. ±×¸®°í 'ÀÎ°øÁö´É', 'IOT' µî°ú °°Àº Å°¿öµå´Â Ã£¾Æ º¼ ¼ö ¾ø¾ú½À´Ï´Ù.
+</div> <br> <br>
+
+<p class="comment"> 2007 Title </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2007/2007_title_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+<p class="comment"> 2007 Contents </p>
+```{r fig.align='center'}
+freq <- read.table("science_IT_data/2007/2007_contents_freq.txt", header=T)
+wordcloud2(freq, color=c)
+```
+<br>
+
+<div class="contents">
+2007³â¿¡´Â '½º¸¶Æ®Æù'¿¡ ´ëÇÑ Å°¿öµå¸¦ Ã£¾Æ º¼ ¼ö ¾ø¾úÀ¸¸ç, 'ÈÞ´ëÆù', LCD', 'ÀÎÅÍ³Ý', 'IPTV', 'UCC' µî°ú °°Àº Å°¿öµå°¡ °¡Àå ´«¿¡ ¶ç¾ú½À´Ï´Ù. ±×¸®°í 2012³â, 2017³â¿¡´Â IT °ü·Ã ¿ë¾î¸¸ °ÅÀÇ ´«¿¡ ¶ç¾ú¾ú´Âµ¥, 2007³â¿¡´Â '¿ìÁÖÀÎ', 'ÁÙ±â¼¼Æ÷', 'DNA' µî°ú °°Àº °úÇÐ°ü·Ã ¿ë¾îµµ »ìÂ¦ Å°¿öµå·Î º¸¿´½À´Ï´Ù.
+</div> <br>
+
+<div style="text-align:right;"><a href="#list"><img src="./images/tolist.png"></a></div> <br>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 5. Association Rules -------------------------------- -->
+
+<img src="./images/caption5.png" id="CH5"> <br> <br>
+
+<div class="explain">
+arules : ¿¬°üºÐ¼®À» ÇÏ±â À§ÇÑ ÆÐÅ°Áö <br> <br>
+arulesViz, visNetwork, igraph : ¿¬°üºÐ¼®, ³×Æ®¿öÅ©ºÐ¼® ½Ã°¢È­¸¦ À§ÇÑ ÆÐÅ°Áö
+</div>
+
+```{r}
+library(arules)
+library(arulesViz)
+library(visNetwork)
+library(igraph)
+```
+
+```{r eval=FALSE}
+# µ¥ÀÌÅÍÇü º¯È¯
+words_tran <- as(words_NC, "transactions")
+
+
+# ¿¬°ü±ÔÄ¢ ºÐ¼®
+words_net <- apriori(words_tran, 
+                     parameter=list(support=0.01, confidence=0.20, minlen=2))
+```
+
+<div class="contents">
+ÀüÃ³¸®¸¦ ÇÑ ´Ü¾îµéÀ» ¿¬°ü±ÔÄ¢ ºÐ¼®À» ÇÏ±â À§ÇÑ ÇüÅÂ·Î `as`¸¦ ÀÌ¿ëÇÏ¿© º¯È¯ÇØÁÖ°í, `apriori`¸¦ ÀÌ¿ëÇÏ¿© ¿¬°ü±ÔÄ¢ ºÐ¼®À» ÁöÁöµµ 0.01ÀÌ»ó, ½Å·Úµµ 0.20ÀÌ»óÀ¸·Î ¼³Á¤ÇÏ¿© ½Ç½ÃÇÏ¿´½À´Ï´Ù. 2007³âºÎÅÍ Â÷·Ê´ë·Î »ìÆìº¸µµ·Ï ÇÏ°Ú½À´Ï´Ù. 
+</div> <br>
+
+<p class="comment"> 2007³â ¿¬°üºÐ¼® </p>
+```{r}
+load("science_IT_data/2007/2007_net.RData")
+inspect(net2007)
+```
+
+<div class="contents">
+2007³âÀº ÃÑ 40°³ÀÇ ±ÔÄ¢À» Ã£¾ÒÀ¸¸ç, ´ëºÎºÐ '°³¹ß'ÀÌ¶ó´Â ´Ü¾î°¡ ¸¹ÀÌ ¾ð±ÞµÇ°í ÀÖÀ½À» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. ÁöÁöµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.035·Î '¿¬±¸'¿Í '°³¹ß' ´Ü¾î°¡ °°ÀÌ »ç¿ëµÇ¾úÀ» ¶§ ¿´½À´Ï´Ù. ½Å·Úµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.625·Î 'DNA'°¡ ¾ð±ÞµÇ¾úÀ» ¶§ '¿¬±¸'°¡ ¾ð±ÞµÈ °æ¿ì¿´½À´Ï´Ù. Çâ»óµµ°¡ °¡Àå ³ôÀº °ÍÀº 8.214·Î 'µð½ºÇÃ·¹ÀÌ'°¡ ¾ð±ÞµÇÁö ¾Ê¾ÒÀ» ¶§º¸´Ù ¾ð±ÞµÇ¾úÀ» ¶§  'LCD'°¡ ¾ð±ÞµÇ´Â Áõ°¡ºñÀ²ÀÌ °¡Àå ³ô¾Ò½À´Ï´Ù. <br>
+ÀüÃ¼ÀûÀ¸·Î 'ÈÞ´ëÆù', '¹ÝµµÃ¼', '°ÔÀÓ', 'LCD'°¡ ¾ð±ÞµÇ¾úÀ» ¶§ '°³¹ß'ÀÌ °¢°¢ ¾ð±ÞµÇ°í ÀÖÀ¸¸ç, 'LCD', 'Ä«¸Þ¶ó', 'MP3', 3G'°¡ ¾ð±ÞµÇ¾úÀ» ¶§ 'ÈÞ´ëÆù'ÀÌ °¢°¢ ¾ð±ÞµÇ°í ÀÖ¾ú½À´Ï´Ù. wordcloud Áß¾Ó Å°¿öµå¿¡ ÀÖ´ø '°³¹ß'°ú 'ÈÞ´ëÆù'ÀÌ ¿À¸¥ÂÊ ³ëµå¿¡ ¸¹ÀÌ ÀÖ´Â °Íµµ È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+</div> <br>
+
+```{r}
+plot(net2007)
+```
+<br>
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â ±ÔÄ¢µéÀÇ ÁöÁöµµ¿Í, ½Å·Úµµ, Çâ»óµµ°¡ ¾î¶»°Ô ºÐÆ÷µÇ¾î ÀÖ´ÂÁö È®ÀÎÇÏ½Ç ¼ö ÀÖ´Â ±×·¡ÇÁÀÔ´Ï´Ù. 2007³â 40°³ÀÇ ±ÔÄ¢Àº ÁöÁöµµ 0.01°ú 0.02 »çÀÌ¿¡ ´ëºÎºÐ ÀÖ¾ú½À´Ï´Ù.
+</div> <br>
+
+```{r fig.height=7}
+plot(net2007, method="grouped")
+```
+
+```{r fig.show='hide', results='hide'}
+ig <- plot(net2007, method="graph", control=list(type="items",max=500))
+```
+
+```{r}
+ig_df <- get.data.frame(ig, what="both")
+
+visNetwork(
+  nodes = data.frame(
+    id = ig_df$vertices$name,
+    value = ig_df$vertices$support,
+    title = ifelse(ig_df$vertices$label == "",
+                   ig_df$vertices$name, 
+                   ig_df$vertices$label),
+    ig_df$vertices
+  ), 
+  edges = ig_df$edges
+) %>%
+  visEdges(ig_df$edges) %>%
+  visOptions(highlightNearest = T)
+```
+
+<div class="explain">
+&hearts; ±×·¡ÇÁÂÊ¿¡ ¸¶¿ì½º Ä¿¼­¸¦ ´ë°í ¸¶¿ì½º ÈÙÀ» ÀÌ¿ëÇÏ½Ã¸é È®´ëÇÏ¼Å¼­ º¸½Ç ¼ö ÀÖ½À´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ Å¬¸¯ÇÏ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéÀÌ Àß º¸¿©Áý´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ ¿òÁ÷ÀÌ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéµµ °°ÀÌ ¿òÁ÷ÀÔ´Ï´Ù.
+</div>
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â 40°³ÀÇ ±ÔÄ¢À» ½Ã°¢È­ÇÑ °ÍÀÔ´Ï´Ù. '°³¹ß'À» Áß½ÉÀ¸·Î ¸¹Àº ´Ü¾î µéÀÌ ¾ð±ÞµÇ¾î ÀÖ´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. 'ÈÞ´ëÆù'À» Áß½ÉÀ¸·Îµµ ¿©·¯ °³ÀÇ ´Ü¾îµéÀÌ ¾ð±ÞµÇ¾î ÀÖ´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. <br>
+wordcloud¿¡¼­ Áß¾Ó¿¡ ÀÖ´ø Å°¿öµåµéÀÌ ¿¬°üºÐ¼®¿¡¼­µµ Áß¾Ó ÂÊ¿¡ À§Ä¡ÇÏ¿© ¸¹Àº ´Ü¾îµé°ú ¿¬°üÀÌ µÇ¾î ÀÖÀ½À» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+</div> <br> <br>
+
+<p class="comment"> 2012³â ¿¬°üºÐ¼® </p>
+```{r}
+load("science_IT_data/2012/2012_net.RData")
+inspect(net2012)
+```
+
+<div class="contents">
+2012³âÀº ÃÑ 170°³ÀÇ ±ÔÄ¢À» Ã£¾ÒÀ¸¸ç, wordcloud¿¡¼­ Å°¿öµå¿´´ø '½º¸¶Æ®Æù'°ú 'LTE'°¡ ¿À¸¥ÂÊ ³ëµå¿¡ ¸¹¾Ò½À´Ï´Ù. ÀÌ´Â ´Ù¸¥ ´Ü¾îµé°ú ¿¬°üÀÌ ¸¹´Ù´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.<br>
+ÁöÁöµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.054·Î 'LTE'¿Í '½º¸¶Æ®Æù'ÀÌ °°ÀÌ »ç¿ëµÇ¾úÀ» ¶§ ¿´À¸¸ç, ½Å·Úµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.865·Î '¿ÉÆ¼¸Ó½º'°¡ ¾ð±ÞµÇ¾úÀ» ¶§ '½º¸¶Æ®Æù'ÀÌ ¾ð±ÞµÇ¾úÀ» ¶§ ¿´½À´Ï´Ù. ½º¸¶Æ®ÆùÀÌ ¸¹ÀÌ ¼ºÀåÇÏ¸é¼­ 'LTE'¿Í ½º¸¶Æ®Æù ±âÁ¾¿¡ ´ëÇÑ ¿¬°ü°ü°è°¡ ¸¹¾ÆÁ³À½À» »ý°¢ÇØ°Ô µÇ¾ú½À´Ï´Ù.<br> 
+±×¸®°í Çâ»óµµ°¡ °¡Àå ³ôÀº °ÍÀº 14.774·Î 'ÄÄÇ»ÆÃ'ÀÌ ¾ð±ÞµÇÁö ¾Ê¾ÒÀ» ¶§º¸´Ù ¾ð±ÞµÇ¾úÀ» ¶§ 'Å¬¶ó¿ìµå'°¡ ¾ð±ÞµÇ´Â Áõ°¡ºñÀ²°ú 'Å¬¶ó¿ìµå'°¡ ¾ð±ÞµÇÁö ¾Ê¾ÒÀ» ¶§º¸´Ù ¾ð±ÞµÇ¾úÀ» ¶§ 'ÄÄÇ»ÆÃ'ÀÌ ¾ð±ÞµÇ´Â Áõ°¡ºñÀ²ÀÌ °¡Àå ³ô¾Ò½À´Ï´Ù. ÀÌ´Â 'Å¬¶ó¿ìµåÄÄÇ»ÆÃ'À¸·Î ¸¹ÀÌ »ç¿ëµÇ¾î ÀÌ·¯ÇÑ °á°ú°¡ ³ª¿Â °ÍÀ¸·Î »ý°¢µË´Ï´Ù.<br>
+ÀüÃ¼ÀûÀ¸·Î ½º¸¶Æ®Æù ±âÁ¾, 'LTE', '4G', 'ÇÃ·§Æû', 'ÅÂºí¸´' µî°ú '½º¸¶Æ®Æù'ÀÌ ¸¹Àº ¿¬°ü°ü°è°¡ ÀÖ¾ú½À´Ï´Ù. ÀÌ¸¦ ÅëÇØ 2012³âÀº IT°è¿­ÀÇ ¹ßÀüÀ¸·Î ½º¸¶Æ®Æù°ú ½º¸¶Æ®Æù°ú °ü·ÃµÈ ºÎºÐµéÀÌ °³¹ßÀÌ µÇ¾úÀ½À» »ý°¢ÇÏ°ÔµÇ¾ú½À´Ï´Ù.
+</div> <br>
+
+```{r}
+plot(net2012)
+```
+<br>
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â ±ÔÄ¢µéÀÇ ÁöÁöµµ¿Í, ½Å·Úµµ, Çâ»óµµ°¡ ¾î¶»°Ô ºÐÆ÷µÇ¾î ÀÖ´ÂÁö È®ÀÎÇÏ½Ç ¼ö ÀÖ´Â ±×·¡ÇÁÀÔ´Ï´Ù.
+2012³âÀÇ 170°³ ±ÔÄ¢µéÀº ÁöÁöµµ 0.01°ú 0.02»çÀÌ¿¡ ¸¹ÀÌ ¹ÐÁýµÇ¾î ÀÖ´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. ±×¸®°í Çâ»óµµ°¡ ¸Å¿ì ³ôÀº ±ÔÄ¢ÀÌ 3°³ ÀÖÀ½À» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+</div> <br>
+
+```{r fig.height=7}
+plot(net2012, method="grouped")
+```
+
+```{r fig.show='hide', results='hide'}
+ig <- plot(net2012, method="graph", control=list(type="items",max=500))
+```
+
+```{r}
+ig_df <- get.data.frame(ig, what="both")
+
+visNetwork(
+  nodes = data.frame(
+    id = ig_df$vertices$name,
+    value = ig_df$vertices$support,
+    title = ifelse(ig_df$vertices$label == "",
+                   ig_df$vertices$name, 
+                   ig_df$vertices$label),
+    ig_df$vertices
+  ), 
+  edges = ig_df$edges
+) %>%
+  visEdges(ig_df$edges) %>%
+  visOptions(highlightNearest = T)
+```
+
+<div class="explain">
+&hearts; ±×·¡ÇÁÂÊ¿¡ ¸¶¿ì½º Ä¿¼­¸¦ ´ë°í ¸¶¿ì½º ÈÙÀ» ÀÌ¿ëÇÏ½Ã¸é È®´ëÇÏ¼Å¼­ º¸½Ç ¼ö ÀÖ½À´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ Å¬¸¯ÇÏ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéÀÌ Àß º¸¿©Áý´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ ¿òÁ÷ÀÌ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéµµ °°ÀÌ ¿òÁ÷ÀÔ´Ï´Ù.
+</div>
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â 2012³â 170°³ÀÇ ±ÔÄ¢µéÀ» ½Ã°¢È­ÇÑ °ÍÀÔ´Ï´Ù. 2007³âº¸´Ù ±ÔÄ¢ÀÌ ¸¹¾Ò±â ¶§¹®¿¡ º¹ÀâÇÏ°Ô °ü°è°¡ ±×·ÁÁö°í, '½º¸¶Æ®Æù'À» Áß½ÉÀ¸·Î ¸¹Àº ´Ü¾îµéÀÌ ¿¬°ü µÇ¾î ÀÖ´Â °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. '½º¸¶Æ®Æù' ÀÌ¿Ü¿¡µµ 'LTE', 'ÇÃ·§Æû', '°³¹ß'À» Áß½ÉÀ¸·Î ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéµµ ¸¹¾Ò½À´Ï´Ù.<br>
+2012³âµµ wordcloud ¿¡¼­ Áß¾Ó¿¡ ÀÖ´ø Å°¿öµåµéÀÌ ¸¹Àº ´Ü¾îµé°ú ¿¬°üÀÌ µÇ¾î ÀÖ´Â °ÍÀ» È®ÀÎÇÒ ¼ö ÀÖ½À´Ï´Ù.
+</div> <br> <br>
+
+<p class="comment"> 2017³â ¿¬°üºÐ¼® </p>
+```{r}
+load("science_IT_data/2017/2017_net2.RData")
+inspect(net2017)
+```
+
+<div class="contents">
+2017³âÀº ÃÑ 352°³ÀÇ ±ÔÄ¢À» Ã£¾Ò½À´Ï´Ù. 2007³â°ú 2012³âº¸´Ù ÈÎ¾À¸¹Àº ±ÔÄ¢µéÀÌ ÀÖ¾úÀ¸¸ç, ´Ü¾îµéµµ ±²ÀåÈ÷ ´Ù¾çÇß½À´Ï´Ù.<br>
+À§¿¡¼­ ¾ð±ÞÇßµíÀÌ 'AI'°¡ 'ÀÎ°øÁö´É'ÀÇ ¶æ°ú 'Á¶·ùµ¶°¨'ÀÇ ¶æÀÌ ÀÖ¾î wordcloud¿¡¼­´Â ÅëÀÏ½ÃÅ°Áö ¸øÇßÁö¸¸, ¿¬°üºÐ¼®À» ÇÒ ¶§´Â 'AI'¸¦ 'ÀÎ°øÁö´É'À¸·Î ÅëÀÏ½ÃÄ×½À´Ï´Ù.<br>
+ÁöÁöµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.053À¸·Î '¿¬±¸'¿Í '°³¹ß'ÀÌ °°ÀÌ »ç¿ëµÇ¾úÀ» ¶§ ¿´½À´Ï´Ù. ½Å·Úµµ°¡ °¡Àå ³ôÀº °ÍÀº 0.915·Î 'MMORPG'°¡ ¾ð±ÞµÇ¾úÀ» ¶§ '°ÔÀÓ'ÀÌ ¾ð±ÞµÈ °æ¿ì ¿´½À´Ï´Ù. 'MMORPG'°¡ ¿Â¶óÀÎ °ÔÀÓÀÌ±â ¶§¹®¿¡ '°ÔÀÓ'ÀÌ ¸¹ÀÌ ¾ð±ÞµÈ °ÍÀ¸·Î »ý°¢µË´Ï´Ù.<br>
+Çâ»óµµ°¡ °¡Àå ³ôÀº °ÍÀº 23.571·Î 'LCD'°¡ ¾ð±ÞµÇÁö ¾Ê¾ÒÀ» ¶§º¸´Ù ¾ð±ÞµÇ¾úÀ» ¶§ 'OLED'°¡ ¾ð±ÞµÇ´Â Áõ°¡ºñÀ²°ú 'OLED'°¡ ¾ð±ÞµÇÁö ¾Ê¾ÒÀ» ¶§ º¸´Ù ¾ð±ÞµÇ¾úÀ» ¶§ 'LCD'°¡ ¾ð±ÞµÇ´Â Áõ°¡ºñÀ²ÀÌ °¡Àå ³ô¾Ò½À´Ï´Ù.<br>
+ÀüÃ¼ÀûÀ¸·Î ¿À¸¥ÂÊ ³ëµå¿¡ 'ÀÎ°øÁö´É', '½º¸¶Æ®Æù', 'IOT', 'ºòµ¥ÀÌÅÍ' µî°ú °°Àº ´Ü¾îµéÀÌ ¸¹ÀÌ ¾ð±ÞµÇ¾î ÀÖ½À´Ï´Ù.
+</div> <br>
+
+```{r}
+plot(net2017)
+```
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â ±ÔÄ¢µéÀÇ ÁöÁöµµ¿Í, ½Å·Úµµ, Çâ»óµµ°¡ ¾î¶»°Ô ºÐÆ÷µÇ¾î ÀÖ´ÂÁö È®ÀÎÇÏ½Ç ¼ö ÀÖ´Â ±×·¡ÇÁÀÔ´Ï´Ù.
+2017³âÀÇ 352°³ ±ÔÄ¢µéÀº ÁöÁöµµ 0.01ºÎÅÍ 0.02 »çÀÌ¿¡ ¸Å¿ì ¸¹ÀÌ ¹ÐÁýµÇ¾î ÀÖ½À´Ï´Ù. ±×¸®°í ½Å·Úµµ 0.2ºÎÅÍ 0.5»çÀÌ¿¡ ¸¹ÀÌ ¹ÐÁýµÇ¾î ÀÖ½À´Ï´Ù.
+</div> <br>
+
+```{r fig.height=7}
+plot(net2017, method="grouped")
+```
+
+```{r fig.show='hide', results='hide'}
+ig <- plot(net2017, method="graph", control=list(type="items",max=500))
+```
+
+```{r}
+ig_df <- get.data.frame(ig, what="both")
+
+visNetwork(
+  nodes = data.frame(
+    id = ig_df$vertices$name,
+    value = ig_df$vertices$support,
+    title = ifelse(ig_df$vertices$label == "",
+                   ig_df$vertices$name, 
+                   ig_df$vertices$label),
+    ig_df$vertices
+  ), 
+  edges = ig_df$edges
+) %>%
+  visEdges(ig_df$edges) %>%
+  visOptions(highlightNearest = T)
+```
+
+<div class="explain">
+&hearts; ±×·¡ÇÁÂÊ¿¡ ¸¶¿ì½º Ä¿¼­¸¦ ´ë°í ¸¶¿ì½º ÈÙÀ» ÀÌ¿ëÇÏ½Ã¸é È®´ëÇÏ¼Å¼­ º¸½Ç ¼ö ÀÖ½À´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ Å¬¸¯ÇÏ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéÀÌ Àß º¸¿©Áý´Ï´Ù. <br>
+&hearts; ³ëµå¸¦ ¿òÁ÷ÀÌ½Ã¸é ¿¬°üµÇ¾î ÀÖ´Â ´Ü¾îµéµµ °°ÀÌ ¿òÁ÷ÀÔ´Ï´Ù.
+</div>
+
+<div class="contents">
+À§ ±×·¡ÇÁ´Â 2017³â 352°³ÀÇ ±ÔÄ¢µéÀ» ½Ã°¢È­ÇÑ °ÍÀÔ´Ï´Ù. °ü°èµµ°¡ 2007³â°ú 2012³âµµº¸´Ù ¸Å¿ì º¹ÀâÇÏ°Ô ±×·ÁÁø °ÍÀ» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.<br>
+'ÀÎ°øÁö´É', 'IOT', 'ÇÃ·§Æû', '°³¹ß', 'ºòµ¥ÀÌÅÍ', '½º¸¶Æ®Æù' µî ¿©·¯ ´Ü¾îµé ÁÖº¯À¸·Î ¸¹Àº ´Ü¾îµéÀÌ ¿¬°üµÇ¾î ÀÖ½À´Ï´Ù.<br>
+wordcloud¿¡¼­ ´«¿¡ ¶çÀÌ´ø Å°¿öµå°¡ ¿¬°üºÐ¼®¿¡¼­µµ ¸¹Àº ´Ü¾îµé°ú ¸¹ÀÌ ¿¬°áµÇ¾î ÀÖ¾ú½À´Ï´Ù. Æ¯È÷ 'ÀÎ°øÁö´É', 'IOT'¿Í °°Àº ´Ü¾î´Â 2012³â¿¡´Â º¸ÀÌÁö ¾Ê´ø Å°¿öµå¿´½À´Ï´Ù. 2017³â¿¡´Â 'ÀÎ°øÁö´É'°ú 'IOT' °³¹ß¿¡ °ü½ÉÀÌ ¸¹¾ÒÀ½À» È®ÀÎÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+</div> <br> <br>
+
+<div style="text-align:right;"><a href="#list"><img src="./images/tolist.png"></a></div> <br>
+
+<br> <br> <hr> <br> <br>
+
+<!-- -------------------------------- 6. ¸¶Ä¡¸ç... -------------------------------- -->
+
+<img src="./images/caption6.png" id="CH6"> <br> <br>
+
+<div class="contents">
+³×ÀÌ¹ö ´º½º·Î ÅØ½ºÆ® ¸¶ÀÌ´× ¿¬°üºÐ¼®À» ÇÏ¸é¼­ ¸¹Àº Á¤º¸¸¦ ¾ò°Ô µÇ¾ú½À´Ï´Ù. ±×·¡¼­ ÀÌ ÇÁ·ÎÁ§Æ® ¸¶Ä£ ÈÄ, PythonÀ¸·Î 2017³â 'ÀÎ°øÁö´É', 'IOT', '½º¸¶Æ®Æù'°ú °ü·ÃµÈ ±â»ç¸¸ µû·Î ¿¬°üºÐ¼®°ú °¨Á¤ºÐ¼® µîÀ» ÁøÇàÇÏ°íÀÚ °èÈ¹ Áß ÀÔ´Ï´Ù. °¨»çÇÕ´Ï´Ù.
+</div> <br> <br>
